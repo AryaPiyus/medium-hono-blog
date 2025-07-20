@@ -9,9 +9,22 @@ export const blogRouter = new Hono<{
     JWT_SECRET: string
   },
   Variables: {
-    userId: string | number
+    userId: string ,
+    
   }
 }>()
+
+blogRouter.use('/*' , async (c , next)=>{
+    const authHeader = c.req.header('Authorization') || ''
+    const user = await verify(authHeader , c.env.JWT_SECRET)
+    if(!user){
+        c.status(403)
+        return c.json({message:"you're not logged in "})
+    }
+    c.set('userId' , user.id)
+    next()
+})
+
 
 blogRouter.post('/',async (c)=>{
     const prisma = new PrismaClient({
@@ -19,11 +32,12 @@ blogRouter.post('/',async (c)=>{
     }).$extends(withAccelerate())
 
     const body = await c.req.json()
+    const userId = c.get('userId')
     const blog = await prisma.blog.create({
         data:{
             title: body.title,
             content: body.content,
-            authorId: 1
+            authorId: userId
         }
     })
 
