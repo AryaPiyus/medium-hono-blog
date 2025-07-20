@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { jwt , sign , verify , decode} from 'hono/jwt'
 
@@ -22,7 +22,7 @@ blogRouter.use('/*' , async (c , next)=>{
         return c.json({message:"you're not logged in "})
     }
     c.set('userId' , user.id)
-    next()
+    await next()
 })
 
 
@@ -65,7 +65,19 @@ blogRouter.put('/' , async (c)=>{
     return c.json({id:blog.id})
 })
 
-blogRouter.get('/' ,async (c)=>{
+
+// for studying later purposes the concept of pagination
+blogRouter.get('/bulk' ,async (c)=>{
+    const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate())
+    const blogs = await prisma.blog.findMany()
+
+    return c.json({blogs})
+})
+
+
+blogRouter.get('/:id' ,async (c)=>{
     const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
@@ -85,15 +97,7 @@ blogRouter.get('/' ,async (c)=>{
     
 
 })
-// for studying later purposes the concept of pagination
-blogRouter.get('/bulk' ,async (c)=>{
-    const prisma = new PrismaClient({
-    datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate())
-    const blogs = await prisma.blog.findMany()
 
-    return c.json({blogs})
-})
 
 
 
