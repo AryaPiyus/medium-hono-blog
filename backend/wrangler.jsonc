@@ -6,11 +6,6 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
-  "vars": {
-    "DATABASE_URL": "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RfaWQiOjEsInNlY3VyZV9rZXkiOiJza19rckU2UkxtSU9Zem9va1hpREdtc2giLCJhcGlfa2V5IjoiMDFLMEoxWlA4QlJOUjc1N1kxWEU0SjAzUlkiLCJ0ZW5hbnRfaWQiOiI0NjcyYmUxZmU1ZmEwOWQwOGYzYzU0YmU0ZTE5NGFhZmJiMTZkYjg5M2VjNTJlNDRmZGJkOWQwMDA0YjBkMjM0IiwiaW50ZXJuYWxfc2VjcmV0IjoiNzA1MzkxY2EtOGFmOC00NjdjLTlhNGItMmMzYWFjN2NkMTY3In0.2FkBN4nSMVjgMIe4va0I87AkFE5S49zPeD0SwRLnnP0",
-    "JWT_SECRET": "xyz@2930",
-    "DIRECT_URL":"postgres://avnadmin:AVNS_wolpTp1rrxZoodr5u_L@medium-blog-db-aryapiyush2930-c5d2.c.aivencloud.com:15708/defaultdb?sslmode=require"
-  },
   // "kv_namespaces": [
   //   {
   //     "binding": "MY_KV_NAMESPACE",
