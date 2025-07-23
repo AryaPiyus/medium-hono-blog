@@ -1,7 +1,28 @@
+import axios from "axios";
 import { useState, type ChangeEvent } from "react"
-import { Link } from "react-router-dom"
+import { Link , useNavigate} from "react-router-dom"
+const BACKEND_URL=import.meta.env.VITE_BACKEND_URL 
+
 
 export const Auth = ({type}:{type: 'signup' | 'signin'}) => {
+    const navigate = useNavigate()
+    async function sendRequest(){
+        try{
+            const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup"?"signup":"signin"}`,{
+                name:postInputs.name,
+                email : postInputs.username,
+                password: postInputs.password,
+            })
+            const jwt = response.data.jwt
+            localStorage.setItem('token' , jwt)
+            navigate('/blog')
+
+            
+        }catch(err){
+            console.error('error whie igning up ')
+        }
+        
+    }
 
     const [ postInputs , SetpostInputs ] = useState({
         name:"",
@@ -22,12 +43,12 @@ export const Auth = ({type}:{type: 'signup' | 'signin'}) => {
                 </div>
                 <div>
                     <div className="pt-4">
-                    <Labledinput label="Name" placeholder="Alex..." onChange={(e)=>{
+                    { type === "signup"?<Labledinput label="Name" placeholder="Alex..." onChange={(e)=>{
                     SetpostInputs(c =>({
                         ...c,
                         name: e.target.value,
                     }))
-                }}/>
+                }}/>:null} 
                 </div>
                 <div>
                     <Labledinput type="text" label="username" placeholder="xyz@gmail.com" onChange={
@@ -47,7 +68,7 @@ export const Auth = ({type}:{type: 'signup' | 'signin'}) => {
                         }))
                     }} />
                 </div>
-                <button type="button" className=" mt-3 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">{ type === "signin" ? "Sign In" : "Sign Up "}</button>
+                <button type="button" onClick={sendRequest} className=" mt-3 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">{ type === "signin" ? "Sign In" : "Sign Up "}</button>
 
                 </div>
                 </div>
@@ -73,3 +94,4 @@ function Labledinput ({ label , placeholder , onChange , type }: LabledinputType
         </div>
     </div>
 }
+
